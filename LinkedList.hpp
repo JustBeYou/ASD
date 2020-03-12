@@ -1,3 +1,4 @@
+#pragma once
 #include <stdexcept>
 #include <new>
 
@@ -5,25 +6,31 @@ namespace ASD {
     template <typename T>
     struct LinkedListNode;
 
+    template <typename T, class Node>
+    class InternalLinkedList;
+
     template <typename T>
-    class LinkedList {
+    using LinkedList = InternalLinkedList<T, LinkedListNode<T>>;
+
+    template <typename T, typename Node>
+    class InternalLinkedList {
         public:
-        LinkedList(): head(nullptr) {}
+        InternalLinkedList(): head(nullptr) {}
     
-        LinkedList(const T& content) {
-            this->head = new LinkedListNode<T>(content);
+        InternalLinkedList(const T& content) {
+            this->head = new Node(content);
         }
 
-        ~LinkedList() {
+        ~InternalLinkedList() {
             this->clear();
         }
 
         void addHead(const T& content) {
             if (this->head == nullptr) {
-                this->head = new LinkedListNode<T>(content);
+                this->head = new Node(content);
             } else {
-                auto newNode = new LinkedListNode<T>(content);
-                newNode->next = this->head;
+                auto newNode = new Node(content);
+                newNode->link(head);
                 this->head = newNode;
             }
         }
@@ -54,18 +61,17 @@ namespace ASD {
 
         class iterator;
 
-        iterator begin() const {
+        iterator begin() {
             return iterator(this->head);
         }
 
-        iterator end() const {
+        iterator end() {
             return iterator(nullptr);
         }
 
         class iterator {
             public:
-            iterator(LinkedListNode<T>* pointer): pointer(pointer) {}
-            iterator(LinkedListNode<T>*& pointer): pointer(pointer) {}
+            iterator(Node* pointer): pointer(pointer) {}
 
             iterator operator++() {
                 auto current = *this;
@@ -81,20 +87,20 @@ namespace ASD {
                 return !(*this == rhs);
             }
 
-            LinkedListNode<T>& operator*() { 
+            Node& operator*() { 
                 return *(this->pointer);
             }
             
-            LinkedListNode<T>* operator->() { 
+            Node* operator->() { 
                 return this->pointer;
             }
 
-            private:
-            LinkedListNode<T>* pointer;
+            protected:
+            Node* pointer;
         };
 
-        private:
-        LinkedListNode<T>* head;
+        protected:
+        Node* head;
     };
 
     template <typename T>
@@ -103,5 +109,12 @@ namespace ASD {
         LinkedListNode* next;
 
         LinkedListNode(const T& content): content(content), next(nullptr) {}
+        void link(LinkedListNode* next) {
+            this->next = next;
+        }
+
+        ~LinkedListNode() {
+            this->next = nullptr;
+        }
     };
 }
