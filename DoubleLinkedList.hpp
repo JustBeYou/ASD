@@ -33,7 +33,7 @@ namespace ASD {
 
         void addTail(const T& content) {
             if (this->head == nullptr) {
-                this->create(); 
+                this->create(content); 
             } else {
                 auto newNode = new DoubleLinkedListNode<T>(content);
                 this->tail->link(newNode);
@@ -110,7 +110,7 @@ namespace ASD {
 
         private:
         void create(const T& content) {
-            this->head = new DoubleLinkedList(content);
+            this->head = new DoubleLinkedListNode<T>(content);
             this->tail = this->head;
         } 
     };
