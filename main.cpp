@@ -32,5 +32,9 @@ void test_LinkedList() {
     ++it;
     assert(it == list.end());
 
+    list.removeHead();
+    auto newHead = list.begin();
+    assert(newHead->content == 321);
+
     cout << "OK" << endl;
 }
