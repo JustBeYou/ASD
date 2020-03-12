@@ -1,3 +1,6 @@
+#include <stdexcept>
+#include <new>
+
 namespace ASD {
     template <typename T>
     struct LinkedListNode;
@@ -11,6 +14,10 @@ namespace ASD {
             this->head = new LinkedListNode<T>(content);
         }
 
+        ~LinkedList() {
+            this->clear();
+        }
+
         void addHead(const T& content) {
             if (this->head == nullptr) {
                 this->head = new LinkedListNode<T>(content);
@@ -21,9 +28,29 @@ namespace ASD {
             }
         }
 
-        void addTail() {
-
+        void clear() {
+            while (this->isNotEmpty()) {
+                this->removeHead();
+            }
         }
+
+        void removeHead() {
+            if (this->isEmpty()) {
+                throw std::logic_error("List is already empty");
+            }
+
+            auto oldHead = this->head;
+            this->head = this->head->next;
+            delete oldHead;
+        }
+
+        bool isEmpty() const {
+            return this->head == nullptr;
+        }
+
+        bool isNotEmpty() const {
+            return !this->isEmpty();
+        } 
 
         class iterator;
 
