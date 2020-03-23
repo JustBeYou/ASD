@@ -1,5 +1,6 @@
 #pragma once
 #include "LinkedList.hpp"
+#include <iostream>
 
 namespace ASD {
     template <typename T>
@@ -23,8 +24,20 @@ namespace ASD {
             return this->elementCount;
         }
 
+        template <typename U>
+        friend void print(Stack<U>& stack);
+
         private:
         size_t elementCount;
         LinkedList<T> content;
     };
+
+    template <typename T>
+    void print(Stack<T>& stack) {
+        std::cout << "< ";
+        for (auto it = stack.content.begin(); it != stack.content.end(); ++it) {
+            std::cout << it->content << " ";
+        }
+        std::cout << ">" << std::endl;
+    }
 }

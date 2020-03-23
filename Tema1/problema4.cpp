@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -86,7 +87,7 @@ void addNeighbours(const Point& p, const int size, Roots& roots, Ranking& ranks)
     }
 }
 
-void solve(vector<Point> points) {
+void solve(vector<Point>& points, vector<vector<char>>& matrix) {
     Roots roots;
     Ranking ranks;
     int size = points.size();
@@ -108,36 +109,40 @@ void solve(vector<Point> points) {
 
     int i = 1;
     for (auto it: solution) {
-        cout << i << " : "; 
         for (auto point: it.second) {
-            pointPrint(point); cout << ", ";
+            matrix[point.x][point.y] = i + '0';
         }
         i++;
-        cout << endl;
     }
 }
 
 int main() {
-    solve({
-        {1, 3},
-        {2, 3},
-        {2, 4},
-        {4, 5},
-        {5, 4},
-        {5, 5},
-        {6, 2},
-        {6, 5},
-        {6, 7},
-        {6, 1},
-        {6, 2},
-        {6, 3},
-        {6, 7},
-        {7, 1},
-        {7, 2},
-        {7, 3},
-        {7, 6},
-        {7, 7},
-    });
+    ifstream in("problema4.in");
+    int n;
+    vector<Point> points;
+
+    in >> n;
+    vector<vector<char>> matrix(n + 1);
+
+    for (int i = 1; i <= n; i++) {
+        matrix[i].push_back('#'); // useless spot
+        for (int j = 1; j <= n; j++) {
+            char c;
+            in >> c;
+            matrix[i].push_back(c);
+            if (matrix[i][j] == '1') {
+                points.push_back({i, j});
+            }
+        }
+    }
+    
+    solve(points, matrix);
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
 
     return 0;
 }

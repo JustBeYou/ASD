@@ -34,8 +34,30 @@ namespace ASD {
             return this->elementCount;
         }
 
+        template <typename U>
+        friend void print(Dequeue<U>& dequeue);
+
         private:
         size_t elementCount;
         DoubleLinkedList<T> content;
     };
+
+    template <typename T>
+    void print(Dequeue<T>& dequeue) {
+        if (dequeue.elementCount == 0) {
+            std::cout << "< >" << std::endl;
+            return ;
+        }
+        if (dequeue.elementCount == 1) {
+            std::cout << "< " << dequeue.content.end()->content << " >" << std::endl;
+            return ; 
+        }
+
+        std::cout << "< ";
+        for (auto it = dequeue.content.begin(); it != dequeue.content.end(); ++it) {
+            std::cout << it->content << " ";
+        }
+        std::cout << dequeue.content.end()->content << " ";
+        std::cout << ">" << std::endl;
+    }
 }
