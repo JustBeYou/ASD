@@ -1,0 +1,114 @@
+\documentclass[12pt]{article}
+\usepackage{design_ASC}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{listings}
+
+\setlength\parindent{0pt} %% Do not touch this
+
+\title{Tema 1}
+
+\author{Mihail Feraru\\
+Grupa 142 - Structuri de Date\\
+\textsc{Universiatea din Bucuresti}
+}
+
+\date{\today} %% Change "\today" by another date manually
+%% -----------------------------
+%% -----------------------------
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\setlength{\droptitle}{-5em}    
+%% %%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+
+% --------------------------
+% Start here
+% --------------------------
+
+% %%%%%%%%%%%%%%%%%%%
+\section*{Problema 1}
+% %%%%%%%%%%%%%%%%%%%
+{\bfseries Demonstrati ca orice algoritm care construieste un arbore binar de  cautare cu $n$ numere  ruleaza in timp $\Omega(n \log{n})$.}
+
+Luam in considerare doar cazul cel mai nefavorabil al algoritmilor pentru complexitatile descrise mai jos. \\
+Consideram urmatoarele propozitii ca fiind adevarate:
+\begin{enumerate}
+    \item Parcurgerea unui arbore binar de cautare pentru a extrage elementele sortate ruleaza in $\Theta(n)$.
+    \item Niciun algoritm de sortare nu poate rula in mai putin de $\Omega(n \log{n})$.
+\end{enumerate}
+Presupunem prin absurd ca exista un algoritm de constructie care ruleaza in mai putin de $\Omega(n \log{n})$. Atunci, conform propozitiei 1 rezulta ca putem sorta orice sir de numere in mai putin de  $\Omega(n \log{n})$, deci propozitia 2 este falsa. $\bot$ \\
+Din contradictia de mai sus, deducem ca orice algoritm de constructie al unui arbore binar de cautare ruleaza in $\Omega({n \log{n}})$.
+
+\section*{Problema 2}
+{\bfseries Demonstrati ca daca $f(n) = \Theta(g(n))$ si $g(n) = \Theta(h(n))$ atunci $f(n) = \Theta(h(n))$}.
+
+Conform definitiei, avem: \\
+\begin{equation*}
+\begin{split}
+f(n) = \Theta(g(n)) \iff \forall c_{g1},c_{g2}\; \exists n_{g0} \in \mathbb{N} \; st. \; \forall n > n_{g0} \implies 0 \leq c_{g1} \cdot g(n) \leq f(n) \leq c_{g2} \cdot g(n) \\
+g(n) = \Theta(h(n)) \iff \forall c_{h1},c_{h2}\; \exists n_{h0} \in \mathbb{N} \; st. \; \forall n > n_{h0} \implies 0 \leq c_{h1} \cdot h(n) \leq g(n) \leq c_{h2} \cdot h(n)
+\end{split}
+\\
+\end{equation*}
+Substituind, rezulta: \\
+\begin{multline*}
+0 \leq c_{h1} c_{g1} \cdot h(n) \leq c_{g1} \cdot g(n) \leq f(n) \leq c_{g2} \cdot g(n) \leq c_{h2} c_{g2} \cdot h(n) \implies \\
+\implies 0 \leq c_{h1} c_{g1} \cdot h(n) \leq f(n)  \leq c_{h2} c_{g2} \cdot h(n) \\
+\therefore \forall c_{1} = c_{g1} c_{h1},c_{2} = c_{g2} c_{h2} \; \exists n_{0} = max(n_{g0}, n_{h0}) \in \mathbb{N} \; st. \; \forall n > n_{0} \implies \\ \implies 0 \leq c_{1} \cdot h(n) \leq f(n)  \leq c_{2} \cdot h(n) \Longleftrightarrow f(n) = \Theta(h(n)) \\
+\qedsymbol
+\end{multline*}
+
+\newpage 
+
+\section*{Problema 3}
+{\bfseries Demonstrati ca $\log{n} = o(\sqrt{n})$.} \\
+Functiile $\log{n}$ si $\sqrt{n}$ sunt elementare, deci putem garanta existenta limitei:
+\begin{equation*}
+\begin{split}
+    L = \lim_{n \to +\infty} {\frac{\log{n}}{\sqrt{n}}} = \frac{+\infty}{+\infty} \xRightarrow{L'H\hat{o}pital} L = \lim_{n \to +\infty} {\frac{\frac{1}{n \ln{2}}}{\frac{1}{2 \sqrt{n}}}} = \lim_{n \to +\infty} \frac{2\sqrt{n}}{n\ln{2}} = 0 \implies \\
+    \implies \forall \epsilon > 0 \; \exists n_0 \in \mathbb{N} \; st. \; \forall n > n_0 \implies \frac{\log{n}}{\sqrt{n}} - 0 < \epsilon \implies 0 \leq \log{n} < \epsilon \cdot \sqrt{n} \\
+\end{split}
+\end{equation*}
+\begin{equation*}
+    \pushQED{\qed} 
+    \therefore \log{n} = o(\sqrt{n}) \qedhere
+    \popQED
+\end{equation*}
+
+\section*{Problema 4}
+{\bfseries Se da un sir cu $n$ numere de la 1 la $n$, cu exceptia unui singur numar care apare de doua ori. Determinati numarul care apare de doua ori.} \\
+
+Fie $x_n$ sirul dat. Notam $S_{x_k} = \sum\limits_{k=1}^{n} {x_k} = 1 + 2 + ... + 2 \cdot i + ... + n - 1$, unde $i$ este numarul care apare de doua ori si $S_{n} = \sum\limits_{k=1}^{n} {k} = \frac{n(n+1)}{2}$. \\
+Atunci, $S_{x_k} - S_{n - 1} = i$. \\
+Implementarea algoritmului, evident cu complexitatea in timp $\Theta(n)$: \\
+\begin{verbatim}
+FIND-DUPLICATE(X: the array, n: its length):
+    sum_X = 0
+    for i = 0 to n - 1
+        sum_X += X[i]
+    duplicate = sum_X - (n - 1) * n / 2
+    return duplicate
+\end{verbatim}
+
+\section*{Problema 5}
+{\bfseries{Fie X[1 :: n] si Y[1 :: n] doi vectori, fiecare continand $n$ numere \textit{sortate}. Prezentati un algoritm care sa gaseasca mediana celor $2n$ elemente. Mediana unei multimi de $n$ elemente este elementul de pe pozitia $[n/2]$ in sirul sortat.}} \\
+
+
+
+\newpage
+
+\section*{Problema 6}
+{\bfseries{Se presupunem urmatoarele. Ati castigat la loterie si v-ati cumparat o vila pe care doriti sa o mobilati. Deoarece Ferrari-ul dvs. are capacitate limitata, doriti sa faceti cat mai putine drumuri de la magazin la vila. Mai exact, Ferrari-ul are capacitate $n$, iar dumneavoastra aveti de cumparat $k$ bunuri de dimensiune $x_1, x_2, ..., x_k$.} \\ 
+Fie urmatorul algoritm greedy. Parcurgem bunurile in ordinea 1,2,...$k$ si incercam sa le punem in masina. In momentul in care un bun nu mai incape in masina, efectuam un transport si continuam algoritmul.}
+
+\subsection*{Cerinta 1}
+{\bfseries{Demonstrati ca algoritmul prezentat mai sus nu este optim.}} \\
+Presupunem prin absurd ca algoritmul este optim si luam urmatorul sir ordonat de bunuri: $(3, 3, 2, 2)$ si $n=5$. Aplicand algoritmul obtinem 3 drumuri: $(3), (3), (2, 2)$. Rearanjand, putem obtine doar 2 drumuri: $(2, 3), (2, 3)$. \\ 
+In concluzie, algoritmul \textbf{NU} este optim.
+
+\subsection*{Cerinta 2}
+{\bfseries{Fie OPT, numarul de drumuri in solutia optima. Demonstrati ca algoritmul greedy prezentat mai sus efectueaza cel mult 2OPT drumuri.}}
+
+\end{document}
