@@ -109,6 +109,22 @@ Presupunem prin absurd ca algoritmul este optim si luam urmatorul sir ordonat de
 In concluzie, algoritmul \textbf{NU} este optim.
 
 \subsection*{Cerinta 2}
-{\bfseries{Fie OPT, numarul de drumuri in solutia optima. Demonstrati ca algoritmul greedy prezentat mai sus efectueaza cel mult 2OPT drumuri.}}
+{\bfseries{Fie OPT, numarul de drumuri in solutia optima. Demonstrati ca algoritmul greedy prezentat mai sus efectueaza cel mult 2OPT drumuri.}} \\
+
+Consideram ca greutatea oricarui bun respecta conditia: $x_i \leq n$. \\
+Vom nota greutatea totala a bunurilor din sirul $x_k$ cu $S_{x_k} = \sum\limits_{i = 1}^{k} {x_i}$. \\ 
+Dat fiind un subsir $y_k$ a lui $x_k$ de bunuri transportate in $i$ zile, definim \textbf{capacitatea totala utilizata in $i$ zile:} $T_i = n \cdot i$, unde $T_i \geq S_{y_k}$ si \textbf{capacitatea totala irosita pentru a transporta $y_k$ : } $L_{i,y_k} = T_i - S_{y_k}$.
+\begin{equation*}
+    L_{i,x_k} = T_i - S_{x_k} \Longleftrightarrow T_i = L_{i,x_k} + S{x_k} \Longleftrightarrow n \cdot i = L_{i,x_k} + S{x_k} \Longleftrightarrow i = \frac{L_{i,x_k} + S{x_k}}{n}
+\end{equation*}
+Evident in cazul optim $i = OPT$. Cum $L_{i,x_k} \geq 0$, avem:
+\begin{equation}
+    OPT \geq \frac{S_{x_k}}{n}
+\end{equation}
+Luand un subsir oarecare $y_k$, daca subsirul $y_{k-1}$ poate fi transportat intr-un singur drum, dar $y_{k}$ nu, atunci $L_{1,y_{k-1}} < y_k$. Considerand toate cele $i$ subsiruri ale lui $x_k$, concluzionam ca $L_{i,x_k} < S_{x_k}$.
+\begin{equation}
+    L_{i,x_k} < S_{x_k} \Longleftrightarrow L_{i,x_k} + S_{x_k} < 2 \cdot S_{x_k} \Longleftrightarrow \frac{L_{i,x_k} + S_{x_k}}{n} < \frac{2 \cdot S_{x_k}}{n} \Longleftrightarrow i < \frac{2 \cdot S_{x_k}}{n}
+\end{equation}
+(1), (2) $\implies i < 2 \cdot OPT$, oricat de ineficient ar fi algoritmul folosit. \qed
 
 \end{document}
