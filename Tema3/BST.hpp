@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <utility>
 
 namespace ASD {
 
@@ -70,6 +71,20 @@ class BST {
         internalInsert(key, root);
     }
 
+    void remove(const KeyType& key) {
+        internalRemove(key, root);
+    }
+
+    bool exists(const KeyType& key) const {
+        return internalExists(key, root);
+    }
+
+    std::vector<KeyType> rangeQuery(const KeyType& leftBound, const KeyType& rightBound) const {
+        std::vector<KeyType> solution;
+        internalRangeQuery(leftBound, rightBound, root, solution);
+        return solution;
+    }
+
     friend std::ostream& operator<<(std::ostream& out, BST<KeyType>& bst) {
         out << "In-order: " << NodePrintInorder << *(bst.root) << std::endl;
         out << "Post-order: " << NodePrintPostOrder << *(bst.root) << std::endl;
@@ -85,6 +100,48 @@ class BST {
             if (key <= node->key) internalInsert(key, node->left);
             else                  internalInsert(key, node->right);
         }
+    }
+
+    bool internalExists(const KeyType& key, const NodePtr& node) const {
+        if (key == node->key) return true;
+
+        if (node->left != nullptr and key <= node->key) return internalExists(key, node->left);
+        else if (node->right != nullptr) return internalExists(key, node->right);
+        
+        return false;
+    }
+
+    void internalRangeQuery(const KeyType& leftBound, const KeyType& rightBound, const NodePtr& node, std::vector<KeyType>& solution) const {
+        if (leftBound < node->key and node->left != nullptr) internalRangeQuery(leftBound, rightBound, node->left, solution);
+        if (leftBound < node->key and node->key < rightBound) solution.push_back(node->key);
+        if (rightBound > node->key and node->right != nullptr) internalRangeQuery(leftBound, rightBound, node->right, solution);
+    }
+
+    void internalRemove(const KeyType& key, NodePtr& node) {
+        if (node == nullptr) return ;
+
+        if (key < node->key) internalRemove(key, node->left);
+        else if (key > node->key) internalRemove(key, node->right);
+        else {
+            if (node->left) {
+                if (node->right) {
+                    NodePtr& suitableRightNode = findSuitableRightNode(node->left);
+                    node->key = suitableRightNode->key;
+                    suitableRightNode = std::move(suitableRightNode->left);
+                } else {
+                    node = std::move(node->left);
+                }
+            } else if (node->right) {
+                node = std::move(node->right);
+            } else {
+                node = std::move(nullptr);
+            }
+        }
+    }
+
+    NodePtr& findSuitableRightNode(NodePtr& node) {
+        if (node->right != nullptr) return findSuitableRightNode(node->right);
+        return node;
     }
 };
 
