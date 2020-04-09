@@ -65,6 +65,10 @@ struct Divide {
         denominator *= initialDenominator;
         return *this;
     }
+
+    bool operator<(T elem) {
+        return elem / denominator != 0;
+    }
 };
 
 template <typename T>
@@ -83,13 +87,17 @@ struct BitShift {
         mask = (1ULL << (shifter + 1)) - 1;
         return *this;
     }
+
+    bool operator<(T elem) {
+        return (elem >> shifter) != 0;
+    }
 };
 
 template <typename T, typename RadixCriteriaType = Divide<T>>
 void radixSort(vector<T>& v, RadixCriteriaType RadixCriteria) {
     for (
         T maxValue = *max_element(v.begin(), v.end());
-        RadixCriteria(maxValue) != 0;
+        RadixCriteria < maxValue;
         ++RadixCriteria
         ) {
         
